@@ -146,7 +146,7 @@ Vendor:   cPanel, Inc.
 Name:     %{?scl_prefix}php
 Version:  7.0.33
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4588 for more details
-%define release_prefix 12
+%define release_prefix 13
 Release: %{release_prefix}%{?dist}.cpanel
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
@@ -1415,8 +1415,14 @@ install -m 755 build-apache/sapi/litespeed/php $RPM_BUILD_ROOT%{_bindir}/lsphp
 %if %{with_fpm}
 # PHP-FPM stuff
 # Log
-install -d $RPM_BUILD_ROOT%{_localstatedir}/log/php-fpm
-install -d $RPM_BUILD_ROOT%{_localstatedir}/run/php-fpm
+
+# we need to do the following to compensate for the way
+# EA4 on OBS was built rather than EA4-Opensuse
+install -d $RPM_BUILD_ROOT/opt/cpanel/%{ns_name}-%{pkg}/root/usr/var/log/php-fpm
+install -d $RPM_BUILD_ROOT/opt/cpanel/%{ns_name}-%{pkg}/root/usr/var/run/php-fpm
+ln -sf /opt/cpanel/%{ns_name}-%{pkg}/root/usr/var/log/php-fpm $RPM_BUILD_ROOT%{_localstatedir}/log/php-fpm
+ln -sf /opt/cpanel/%{ns_name}-%{pkg}/root/usr/var/run/php-fpm $RPM_BUILD_ROOT%{_localstatedir}/run/php-fpm
+
 # Config
 install -m 755 -d $RPM_BUILD_ROOT%{_sysconfdir}/php-fpm.d
 install -m 644 %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/php-fpm.conf
@@ -1716,6 +1722,10 @@ fi
 %if %{with_fpm}
 %files fpm
 %defattr(-,root,root)
+# we need to do the following to compensate for the way
+# EA4 on OBS was built rather than EA4-Opensuse
+%attr(770,nobody,root) %dir /opt/cpanel/%{ns_name}-%{pkg}/root/usr/var/log/php-fpm
+%attr(711,root,root) %dir /opt/cpanel/%{ns_name}-%{pkg}/root/usr/var/run/php-fpm
 %doc php-fpm.conf.default
 %license fpm_LICENSE
 %config(noreplace) %{_sysconfdir}/php-fpm.conf
@@ -1732,13 +1742,12 @@ fi
 %{_sbindir}/php-fpm
 %attr(0710,root,root) %dir %{_sysconfdir}/php-fpm.d
 # log owned by nobody for log
-%attr(770,nobody,root) %dir %{_localstatedir}/log/php-fpm
-%attr(711,root,root) %dir %{_localstatedir}/run/php-fpm
+%attr(770,nobody,root) %{_localstatedir}/log/php-fpm
+%attr(711,root,root) %{_localstatedir}/run/php-fpm
 %{_mandir}/man8/php-fpm.8*
 %dir %{_datadir}/fpm
 %{_datadir}/fpm/status.html
 %dir %{_sysconfdir}/sysconfig
-%dir %{_sbindir}
 %dir %{_mandir}/man8
 %dir %{_localstatedir}/log
 %dir %{_localstatedir}/run
@@ -1823,6 +1832,9 @@ fi
 %endif
 
 %changelog
+* Tue Mar 03 2020 Julian Brown <julian.brown@cpanel.net> - 7.0.33-13
+- ZC-6247: Remove multiple conflicts between php-fpm and other rpms
+
 * Wed Dec 18 2019 Daniel Muey <dan@cpanel.net> - 7.0.33-12
 - ZC-4361: Update ea-openssl requirement to v1.1.1 (ZC-5583)
 
