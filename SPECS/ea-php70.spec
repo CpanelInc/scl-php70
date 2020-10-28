@@ -146,7 +146,7 @@ Vendor:   cPanel, Inc.
 Name:     %{?scl_prefix}php
 Version:  7.0.33
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4588 for more details
-%define release_prefix 17
+%define release_prefix 18
 Release: %{release_prefix}%{?dist}.cpanel
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
@@ -1168,6 +1168,8 @@ mkdir Zend && cp ../Zend/zend_{language,ini}_{parser,scanner}.[ch] Zend
 # openssl: for PHAR_SIG_OPENSSL
 # zlib: used by image
 
+export LDFLAGS="-Wl,-rpath=/opt/cpanel/ea-brotli/lib"
+
 ln -sf ../configure
 %configure \
     --cache-file=../config.cache \
@@ -1865,6 +1867,9 @@ fi
 %endif
 
 %changelog
+* Wed Oct 28 2020 Tim Mullin <tim@cpanel.net> - 7.0.33-18
+- EA-9390: Fix build with latest ea-brotli (v1.0.9)
+
 * Fri Sep 04 2020 Tim Mullin <tim@cpanel.net> - 7.0.33-17
 - EA-9281: Update litespeed from upstream to 7.8
 
