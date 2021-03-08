@@ -146,7 +146,7 @@ Vendor:   cPanel, Inc.
 Name:     %{?scl_prefix}php
 Version:  7.0.33
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4588 for more details
-%define release_prefix 19
+%define release_prefix 20
 Release: %{release_prefix}%{?dist}.cpanel
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
@@ -157,7 +157,7 @@ URL:      http://www.php.net/
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Source0: http://www.php.net/distributions/php-%{version}%{?rcver}.tar.bz2
-Source1: https://www.litespeedtech.com/packages/lsapi/php-litespeed-7.8.tgz
+Source1: https://www.litespeedtech.com/packages/lsapi/php-litespeed-7.9.tgz
 Source2: php.ini
 Source3: macros.php
 Source4: php-fpm.conf
@@ -1867,6 +1867,9 @@ fi
 %endif
 
 %changelog
+* Fri Mar 05 2021 Cory McIntire <cory@cpanel.net> - 7.0.33-20
+- EA-9625: Update litespeed to 7.9
+
 * Thu Oct 29 2020 Daniel Muey <dan@cpanel.net> - 7.0.33-19
 - ZC-7893: Update DSO config to factor in PHP 8
 
