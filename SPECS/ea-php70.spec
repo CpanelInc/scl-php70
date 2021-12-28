@@ -146,7 +146,7 @@ Vendor:   cPanel, Inc.
 Name:     %{?scl_prefix}php
 Version:  7.0.33
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4588 for more details
-%define release_prefix 21
+%define release_prefix 22
 Release: %{release_prefix}%{?dist}.cpanel
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
@@ -1867,6 +1867,9 @@ fi
 %endif
 
 %changelog
+* Tue Dec 28 2021 Dan Muey <dan@cpanel.net> - 7.0.33-22
+- ZC-9589: Update DISABLE_BUILD to match OBS
+
 * Mon Jun 28 2021 Travis Holloway <t.holloway@cpanel.net> - 7.0.33-21
 - EA-9013: Disable %check section
 
