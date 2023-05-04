@@ -1,3 +1,7 @@
+%if 0%{?rhel} == 7
+%global debug_package %{nil}
+%endif
+
 # Defining the package namespace
 # NOTE: pkg variable is a hack to fix invalid macro inside of macros.php
 %global ns_name ea
