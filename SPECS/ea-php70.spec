@@ -151,7 +151,7 @@ Vendor:   cPanel, Inc.
 Name:     %{?scl_prefix}php
 Version:  7.0.33
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4588 for more details
-%define release_prefix 25
+%define release_prefix 26
 Release: %{release_prefix}%{?dist}.cpanel
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
@@ -204,6 +204,8 @@ Patch200: php-fpm.epoll.patch
 Patch400: 0020-PLESK-sig-block-reexec.patch
 Patch401: 0021-PLESK-avoid-child-ignorance.patch
 Patch402: 0022-PLESK-missed-kill.patch
+
+Patch501: 0031-Update-libxml-include-file-references.patch
 
 BuildRequires: bzip2-devel, %{ns_name}-libcurl >= %{ea_libcurl_ver}, %{ns_name}-libcurl-devel >= %{ea_libcurl_ver}, %{db_devel}
 BuildRequires: pam-devel
@@ -1008,6 +1010,8 @@ sed -i 's/buffio.h/tidybuffio.h/' ext/tidy/*.c
 %patch400 -p1
 %patch401 -p1
 %patch402 -p1
+
+%patch501 -p1 -b .libxml
 
 # Prevent %%doc confusion over LICENSE files
 cp Zend/LICENSE Zend/ZEND_LICENSE
@@ -1872,6 +1876,9 @@ fi
 %endif
 
 %changelog
+* Tue Nov 21 2023 Tim Mullin <tim@cpanel.net> - 7.0.33-26
+- EA-11821: Patch to build with the latest ea-libxml2
+
 * Wed May 17 2023 Brian Mendoza <brian.mendoza@cpanel.net> - 7.0.33-25
 - ZC-10950: Add debug_package nil back w/ second directive (3rd item will be ZC-10951)
 
